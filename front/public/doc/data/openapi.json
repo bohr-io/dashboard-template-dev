@@ -1,0 +1,1712 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "bohr.io API",
+    "description": "The deploy platform for developers.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "paths": {
+    "/user/getMe": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get logged user data",
+        "responses": {
+          "200": {
+            "description": "Json with user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserFull"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/sites": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get logged user sites",
+        "responses": {
+          "200": {
+            "description": "Json with sites data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSites"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/beta/{userName}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Validate if user is approved in beta",
+        "parameters": [
+          {
+            "name": "userName",
+            "in": "path",
+            "description": "Github user name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],        
+        "responses": {
+          "200": {
+            "description": "Json with user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBeta"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },  
+    "/user/beta": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Update userName on beta table",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutBeta"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {},
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },      
+    "/site/{site_org}/{site_name}": {
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Get a site",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }         
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns json with site data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Delete a site",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Site deleted"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings/{site_org}/{site_name}": {
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Get a site",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deploy_group_id",
+            "in": "query",
+            "description": "Deploy Group Id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }          
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns json with site data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiteSettings"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Delete a site",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Site deleted"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings_auth": {
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Update site authentication settings",
+        "requestBody": {
+          "description": "type: none/basic/oauth <br /><br /> basic authentication: <br />\"type\": \"basic\", <br /> \"basic\": { <br /> &nbsp;&nbsp;&nbsp;&nbsp;\"username\": \"string\", <br /> &nbsp;&nbsp;&nbsp;&nbsp;\"password\":\"string\"<br /> } <br /><br /> oauth authentication: <br />\"type\": \"oauth\", <br /> \"oauth\": { <br /> &nbsp;&nbsp;&nbsp;&nbsp;\"provider\": \"string\", <br /> &nbsp;&nbsp;&nbsp;&nbsp;\"client_id\":\"string\",<br />&nbsp;&nbsp;&nbsp;&nbsp;\"secret\":\"string\"<br /> }",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsAuth"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns site settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings_general": {
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Update site general settings",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsGeneral"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns site settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings_commands": {
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Update site commands settings",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsCommands"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns site settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings_vars": {
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Update site enviroment variables settings",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsVars"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns site settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsFull"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/settings_url": {
+      "put": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Update site url - admin only",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsURL"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/deploy/{site_org}/{site_name}": {
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Get all deploys",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deploy_id",
+            "in": "query",
+            "description": "Deploy Id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }          
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns json with deploy data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeployList"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },    
+    "/site/deploy_group/{site_org}/{site_name}": {
+      "get": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Get all deploy Groups",
+        "parameters": [
+          {
+            "name": "site_org",
+            "in": "path",
+            "description": "Organization name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "site_name",
+            "in": "path",
+            "description": "Site Name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deploy_group_id",
+            "in": "query",
+            "description": "Deploy Group Id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns json with deploy Group data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeployGroupList"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },    
+    "/site/deploy": {
+      "post": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Deploy site to Edge",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsDeploy"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/site/deploy-function": {
+      "post": {
+        "tags": [
+          "Site"
+        ],
+        "description": "Deploy Functions",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsDeployFunction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/set_site": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Cria worker e site caso necessário e retorna lista de configurações do site",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetSiteBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "JSON com o resultado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSiteList"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/fork": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Faz um fork na conta GitHub do usuario autenticado",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForkBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFork"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/create_repo_from_template": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Cria um repositorio na conta GitHub do usuario autenticado a partir do repositorio template passado",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRepoFromTemplateBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCreateRepoFromTemplate"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/add_objects": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Adiciona hashes na tabela OBJETOS",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddObjectsBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAddObjects"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/get_missing_objects": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Retorna as hashes da lista passada nao existentes na tabela OBJETOS",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetMissingObjectsBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetMissingObjects"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/new": {
+      "post": {
+        "tags": [
+          "Função"
+        ],
+        "description": "Creates new site",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSite"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Site created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewSiteRes"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UsuarioBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "UsuarioFull": {
+        "type": "object",
+        "properties": {
+          "USUARIO_ID": {
+            "type": "number"
+          },
+          "EMAIL": {
+            "type": "string"
+          }
+        }
+      },
+      "Deploy": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "siteId": {
+            "type": "string"
+          },
+          "deployGroupId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "lambda": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DeployList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "string"
+            },
+            "deployGroupId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "hash": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      },
+      "DeployGroupList": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "Id": {
+              "type": "string"
+            },
+            "deployId": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "hash": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      },
+      "UserFull": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "avatar_url": {
+            "type": "string"
+          },
+          "orgs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "sites": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "UserFull"
+        }
+      },
+      "SiteFull": {
+        "type": "object",
+        "properties": {
+          "mainDeployGroup": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "hash": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "userName": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "parsedDeploysGroups": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "hash": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "userName": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "localhosts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string"
+                },
+                "userImage": {
+                  "type": "string"
+                },
+                "deployGroupName": {
+                  "type": "string"
+                },
+                "hash": {
+                  "type": "string"
+                },
+                "deployGroupUpdatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SiteFull"
+        }
+      },
+      "SiteSettings": {
+        "type": "object",
+        "properties": {
+          "site_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "properties": {
+              "general": {
+                "type": "object",
+                "properties": {
+                  "node_version": {
+                    "type": "string"
+                  },
+                  "root_directory": {
+                    "type": "string"
+                  },
+                  "main_branch": {
+                    "type": "string"
+                  }
+                }
+              },
+              "vars": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "commands": {
+                "type": "object",
+                "properties": {
+                  "framework": {
+                    "type": "string"
+                  },
+                  "build_command": {
+                    "type": "string"
+                  },
+                  "output_directory": {
+                    "type": "string"
+                  },
+                  "install_command": {
+                    "type": "string"
+                  },
+                  "development_command": {
+                    "type": "string"
+                  }
+                }
+              },
+              "auth": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SiteFull"
+        }
+      },
+      "GetBeta": {
+        "type": "boolean",
+        "xml": {
+          "name": "GetBeta"
+        }
+      },      
+      "PutBeta": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "userName": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "PutBeta"
+        }
+      },
+      "UserSites": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "xml": {
+          "name": "UserSites"
+        }
+      },
+      "ResponseUsuarioList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UsuarioFull"
+        }
+      },
+      "WorkerBody": {
+        "type": "object",
+        "properties": {
+          "usuario_id": {
+            "type": "number"
+          },
+          "identificador": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "WorkerFull": {
+        "type": "object",
+        "properties": {
+          "WORKER_ID": {
+            "type": "number"
+          },
+          "USUARIO_ID": {
+            "type": "number"
+          },
+          "IDENTIFICADOR": {
+            "type": "string"
+          }
+        }
+      },
+      "ResponseWorkerList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/WorkerFull"
+        }
+      },
+      "NewSite": {
+        "type": "object",
+        "properties": {
+          "org_name": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          },
+          "sample_url": {
+            "type": "string"
+          },
+          "private": {
+            "type": "boolean"
+          }
+        },
+        "xml": {
+          "name": "NewSite"
+        }
+      },
+      "NewSiteRes": {
+        "type": "object",
+        "properties": {
+          "ret": {
+            "type": "number"
+          },
+          "org_name": {
+            "type": "string"
+          },
+          "repo_name": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "NewSiteRes"
+        }
+      },
+      "SiteBody": {
+        "type": "object",
+        "properties": {
+          "worker_id": {
+            "type": "number"
+          },
+          "usuario_id": {
+            "type": "number"
+          },
+          "identificador": {
+            "type": "string"
+          },
+          "configuracao": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "SiteBody"
+        }
+      },
+      "SettingsVars": {
+        "type": "object",
+        "properties": {
+          "site_org": {
+            "type": "string"
+          },
+          "site_name": {
+            "type": "string"
+          },
+          "deploy_group_id": {
+            "type": "string"
+          },          
+          "vars": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsVars"
+        }
+      },
+      "SettingsGeneral": {
+        "type": "object",
+        "properties": {
+          "site_org": {
+            "type": "string"
+          },
+          "site_name": {
+            "type": "string"
+          },
+          "deploy_group_id": {
+            "type": "string"
+          },          
+          "general": {
+            "type": "object",
+            "properties": {
+              "node_version": {
+                "type": "string"
+              },
+              "root_directory": {
+                "type": "string"
+              },
+              "main_branch": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsGeneral"
+        }
+      },
+      "SettingsURL": {
+        "type": "object",
+        "properties": {
+          "site_org": {
+            "type": "string"
+          },
+          "site_name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "deploy_group_id": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "SettingsURL"
+        }
+      },
+      "SettingsAuth": {
+        "type": "object",
+        "properties": {
+          "site_org": {
+            "type": "string"
+          },
+          "site_name": {
+            "type": "string"
+          },
+          "deploy_group_id": {
+            "type": "string"
+          },
+          "auth": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsAuth"
+        }
+      },
+      "SettingsCommands": {
+        "type": "object",
+        "properties": {
+          "site_org": {
+            "type": "string"
+          },
+          "site_name": {
+            "type": "string"
+          },
+          "deploy_group_id": {
+            "type": "string"
+          },
+          "commands": {
+            "type": "object",
+            "properties": {
+              "framework": {
+                "type": "string"
+              },
+              "build_command": {
+                "type": "string"
+              },
+              "output_directory": {
+                "type": "string"
+              },
+              "install_command": {
+                "type": "string"
+              },
+              "development_command": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsCommands"
+        }
+      },
+      "SettingsFull": {
+        "type": "object",
+        "properties": {
+          "general": {
+            "type": "object",
+            "properties": {
+              "node_version": {
+                "type": "string"
+              },
+              "root_directory": {
+                "type": "string"
+              },
+              "main_branch": {
+                "type": "string"
+              }
+            }
+          },
+          "vars": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "commands": {
+            "type": "object",
+            "properties": {
+              "framework": {
+                "type": "string"
+              },
+              "build_command": {
+                "type": "string"
+              },
+              "output_directory": {
+                "type": "string"
+              },
+              "install_command": {
+                "type": "string"
+              },
+              "development_command": {
+                "type": "string"
+              }
+            }
+          },
+          "auth": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsFull"
+        }
+      },
+      "SettingsDeploy": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "base64": {
+              "type": "boolean"
+            }
+          }
+        },
+        "xml": {
+          "name": "SettingsDeploy"
+        }
+      },
+      "SettingsDeployFunction": {
+        "type": "object",
+        "properties": {
+          "ZIP_HASH": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "SettingsDeployFunction"
+        }
+      },
+      "ResponseSiteList": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SiteFull"
+        }
+      },
+      "SetSiteBody": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "identificador_site": {
+            "type": "string"
+          },
+          "identificador_worker": {
+            "type": "string"
+          },
+          "configuracao": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "ForkBody": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "repo": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "ResponseFork": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "CreateRepoFromTemplateBody": {
+        "type": "object",
+        "properties": {
+          "template_owner": {
+            "type": "string"
+          },
+          "template_repo": {
+            "type": "string"
+          },
+          "repo_name": {
+            "type": "string"
+          },
+          "repo_private": {
+            "type": "boolean"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "ResponseCreateRepoFromTemplate": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "AddObjectsBody": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "ResponseAddObjects": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "GetMissingObjectsBody": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "xml": {
+          "name": "xml"
+        }
+      },
+      "ResponseGetMissingObjects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "xml": {
+          "name": "xml"
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-ak"
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
+}

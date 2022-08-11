@@ -1,0 +1,178 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  previewFeatures = ["referentialIntegrity", "extendedIndexes"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+enum UserType {
+  USER
+  ORGANIZATION
+}
+
+enum DeployStatus {
+  BUILDING
+  SUCCESS
+  ERROR
+  SLEEP
+}
+
+enum DeployGroupType {
+  BRANCH
+  PR
+  TAG
+}
+
+enum TokenType {
+  WEB
+  CLI
+}
+
+enum LocalhostStatus {
+  INITIATING
+  INSTALING
+  STARTING
+  RUNNING
+  CLOSED
+}
+
+model BetaUser {
+  id        String   @id @default(cuid())
+  email     String   @unique @db.VarChar(256)
+  userName  String?  @unique @db.VarChar(256)
+  approved  Boolean? @db.Bit(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                   String      @id @default(cuid())
+  username             String      @unique @db.VarChar(256)
+  name                 String      @db.VarChar(256)
+  type                 UserType
+  isAdmin              Boolean     @db.Bit(1)
+  githubInstallationId String?     @db.VarChar(256)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  sites                Site[]
+  deploys              Deploy[]
+  tokens               Token[]
+  users                UserOrg[]   @relation(name: "user")
+  orgs                 UserOrg[]   @relation(name: "org")
+  Localhost            Localhost[]
+}
+
+model UserOrg {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction, name: "user")
+  orgId     String
+  org       User     @relation(fields: [orgId], references: [id], onDelete: Restrict, onUpdate: NoAction, name: "org")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, orgId])
+}
+
+model Site {
+  id           String        @id @default(cuid())
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  name         String        @db.VarChar(256)
+  settings     String        @db.Text
+  url          String        @db.VarChar(256)
+  icon         String        @db.VarChar(256)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deployGroups DeployGroup[]
+  deploys      Deploy[]
+  Localhosts   Localhost[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model DeployGroup {
+  id              String          @id @default(cuid())
+  siteId          String
+  site            Site            @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  currentDeployId String?
+  currentDeploy   Deploy?         @relation(fields: [currentDeployId], references: [id], onDelete: NoAction, onUpdate: NoAction, name: "currentDeploy")
+  type            DeployGroupType
+  name            String          @db.VarChar(256)
+  url             String          @db.VarChar(256)
+  liveUrl         String?         @db.VarChar(256)
+  settings        String          @db.Text
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  deploys         Deploy[]        @relation(name: "deploys")
+
+  Localhost Localhost[]
+  @@index([siteId])
+}
+
+model Deploy {
+  id                  String        @id @default(cuid())
+  siteId              String
+  site                Site          @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userId              String?
+  user                User?         @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  deployGroupId       String
+  deployGroup         DeployGroup   @relation(fields: [deployGroupId], references: [id], onDelete: NoAction, onUpdate: NoAction, name: "deploys")
+  hash                String?       @db.VarChar(256)
+  lambda              String?       @db.Text
+  status              DeployStatus
+  githubDeploymentId  String?
+  githubActions       Boolean?
+  githubActionsToken  String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  currentDeployGroups DeployGroup[] @relation(name: "currentDeploy")
+
+  @@index([siteId])
+  @@index([deployGroupId])
+}
+
+model Token {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  token     String    @default(cuid())
+  type      TokenType
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Object {
+  hash String @id @db.Char(64)
+}
+
+model Localhost {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  siteId        String?
+  site          Site?           @relation(fields: [siteId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  deployGroupId String?
+  deployGroup   DeployGroup?    @relation(fields: [deployGroupId], references: [id], onDelete: Restrict, onUpdate: NoAction)
+  url           String
+  status        LocalhostStatus
+  lastRunTime   DateTime
+  lastCloseTime DateTime
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([userId])
+  @@index([deployGroupId])
+}
+
+model Config {
+  id               Int    @id @default(autoincrement())
+  githubPrivateKey String @db.VarChar(2000)
+}
