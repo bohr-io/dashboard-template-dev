@@ -1,10 +1,10 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 import createAPI from 'lambda-api';
-import prisma from "./prisma/prisma";
 
 const api = createAPI();
 
 api.register(require("./src/login"), { prefix: "/login" });
+api.register(require("./src/logout"), { prefix: "/logout" });
 
 api.use(async (req, res, next) => {
     try {
@@ -18,7 +18,7 @@ api.use(async (req, res, next) => {
     }
 });
 
-api.register(require("./src/api/index"), { prefix: "/api" });
+api.register(require("./src/user"), { prefix: "/user" });
 
 export async function handler(event: APIGatewayEvent, context: Context, callback: any) {
     return await api.run(event, context);
