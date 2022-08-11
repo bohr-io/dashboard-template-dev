@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
-import Link from '../Link';
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 const SidebarWrapper = styled.aside`
   padding: 5px 20px;
@@ -8,6 +8,8 @@ const SidebarWrapper = styled.aside`
   color: rgb(255, 255, 255);
   width: 200px;
   height: 100vh;
+  flex-grow: 0;
+  flex-shrink: 0;
 `
 
 const LogoWrapper = styled.div`
@@ -39,43 +41,37 @@ const Header: FC = () => {
   return (
     <SidebarWrapper>
       <LogoWrapper>
-        <p>Dashboard</p>
+        <p>
+          <Link
+            color="white"
+            to="home"
+          >
+            Dashboard
+          </Link>
+        </p>
       </LogoWrapper>
       <PanelNav>
         <NavLinkList>
           <li>
-            Cadastros
+            Users
             <NavLinkList>
               <li>
                 <Link
                   color="white"
-                  href="/admin/palavras"
-                  underline="hover"
+                  to="user"
                 >
-                  Lista
+                  List
                 </Link>
               </li>
               <li>
                 <Link
                   color="white"
-                  href="/admin/palavras"
-                  underline="hover"
+                  to="user/new"
                 >
-                  Registro
+                  New
                 </Link>
               </li>
             </NavLinkList>
-          </li>
-        </NavLinkList>
-        <NavLinkList>
-          <li>
-            <Link
-              color="white"
-              href="/admin/palavras"
-              underline="hover"
-            >
-              Palavras
-            </Link>
           </li>
         </NavLinkList>
       </PanelNav>
