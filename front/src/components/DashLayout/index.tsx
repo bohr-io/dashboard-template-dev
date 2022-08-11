@@ -4,15 +4,20 @@ import Sidebar from '../Sidebar'
 
 const DashLayoutWrapper = styled.div`
   display: flex;
-  gap: 30px;
-  padding-right: 30px;
+`
+
+const DashPageContainer = styled.div`
+  width: 100%;
+  padding: 20px;
 `
 
 const DashLayout = () => {
   return (
     <DashLayoutWrapper>
       <Sidebar />
-      <Outlet />
+      <DashPageContainer>
+        <Outlet />
+      </DashPageContainer>
     </DashLayoutWrapper>
   )
 }

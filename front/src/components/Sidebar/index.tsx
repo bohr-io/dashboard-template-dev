@@ -3,6 +3,8 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 const SidebarWrapper = styled.aside`
+  position: sticky;
+  top: 0;
   padding: 5px 20px;
   background-color: rgb(130, 10, 209);
   color: rgb(255, 255, 255);
