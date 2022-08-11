@@ -6,20 +6,20 @@ import styles from '../styles/Home.module.css'
 const Login: FC = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    window.location.href = '/palavras'
+    window.location.href = '/dash/home'
   }
   
   return (
     <div className={styles.container}>
       <Head>
-        <title>Painel de Admin</title>
-        <meta name="description" content="Painel de Admin" />
+        <title>Dashboard</title>
+        <meta name="description" content="Dashboard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <Typography variant="h1">
-          Painel de Admin - Login
+          Dashboard - Login
         </Typography>
         
         <form
@@ -28,7 +28,7 @@ const Login: FC = () => {
         >
           <TextField
             id="user"
-            label="Usuário"
+            label="User"
             type="text"
             size="small"
             variant="standard"
@@ -36,7 +36,7 @@ const Login: FC = () => {
 
           <TextField
             id="password"
-            label="Senha"
+            label="Password"
             type="password"
             size="small"
             variant="standard"
