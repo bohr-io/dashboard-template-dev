@@ -1,12 +1,38 @@
 import { Button, TextField, Typography } from '@mui/material'
 import Head from 'next/head'
-import { FC, FormEvent } from 'react'
+import { FC, FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Reaptcha from 'reaptcha'
 import styles from '../styles/Home.module.css'
 
+const REACAPTCHA_SITE_KEY = "6Lc2OG4hAAAAAF_Wx9HXq3O-FKTmyG_eOamPyykl"
+
 const Login: FC = () => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [recaptchaToken, setRecaptchaToken] = useState('')
+  const isLoginDisabled = !recaptchaToken
+
+  const updateRecaptchaToken = (token: string) => setRecaptchaToken(token)
+  const clearRecaptchaToken = () => setRecaptchaToken('')
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    window.location.href = '/dash/home'
+    
+    fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        username,
+        password,
+        recaptchaToken
+      })
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) navigate('/dash/home')
+        else alert('Login fail')
+      })
   }
   
   return (
@@ -21,7 +47,7 @@ const Login: FC = () => {
         <Typography variant="h1">
           Dashboard - Login
         </Typography>
-        
+
         <form
           onSubmit={handleSubmit}
           className={styles.loginForm}
@@ -32,6 +58,8 @@ const Login: FC = () => {
             type="text"
             size="small"
             variant="standard"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <TextField
@@ -40,9 +68,18 @@ const Login: FC = () => {
             type="password"
             size="small"
             variant="standard"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          
-          <Button type="submit">
+          <Reaptcha
+            sitekey={REACAPTCHA_SITE_KEY}
+            onVerify={updateRecaptchaToken}
+            onExpire={clearRecaptchaToken}
+          />
+          <Button
+            type="submit"
+            disabled={isLoginDisabled}
+          >
             Login
           </Button>
         </form>
