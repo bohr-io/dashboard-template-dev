@@ -26,12 +26,13 @@ const DeleteModalWrapper = styled.dialog`
 `
 
 type Props = {
+  children: ReactNode
   onClose: () => void
   onDelete: () => void
   isOpen: boolean
 }
 
-const DeleteModal: FC<Props> = ({ onClose, onDelete, isOpen }) => {
+const DeleteModal: FC<Props> = ({ children, onClose, onDelete, isOpen }) => {
   const ref = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -81,6 +82,7 @@ const DeleteModal: FC<Props> = ({ onClose, onDelete, isOpen }) => {
         <Typography variant="h4">
           Do you really want to delete this entry?
         </Typography>
+        {children}
         <Box
           display="flex"
           gap="20px"

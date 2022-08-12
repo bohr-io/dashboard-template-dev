@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton, TableCell, TableRow } from '@mui/material'
+import { IconButton, TableCell, TableRow, Typography } from '@mui/material'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User } from '../../types'
@@ -48,7 +48,9 @@ const UserTableEntry: FC<{ user: User }> = ({ user }) => {
           isOpen={isModalOpen}
           onDelete={handleDelete}
           onClose={closeModal}
-        />
+        >
+          <Typography>User: {name}</Typography>
+        </DeleteModal>
       </TableCell>
     </TableRow>
   )
