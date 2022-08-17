@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
-import { Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
-import { FC, useState } from 'react';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { ChangeEventHandler, FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
+import { User } from '../types';
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -22,23 +23,49 @@ const HeaderWrapper = styled.header`
   }
 `
 
+const filterUsers = (users: User[], filters: [string, string][]) => {
+  return users.filter((user) => {
+    const fieldMatchs = filters.map(([key, value]) => {
+      return user[key as keyof User].match(value)
+    })
+    return fieldMatchs.every((match) => match)
+  })
+}
+
 const User: FC = () => {
   const navigate = useNavigate()
   const { users, fetchUsers } = useUser()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [fiter, setFilter] = useState('')
+  const [filters, setFilters] = useState({
+    username: '',
+    email: '',
+  })
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0
+  const filtersEntries = Object.entries(filters).filter(([key, value]) => value.length > 0)
+  const usersOnDisplay = filtersEntries.length > 0
+                       ? filterUsers(users, filtersEntries)
+                       : users
+  
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersOnDisplay.length) : 0
   const isFirstPage = page === 0
-  const isLastPage = page + 1 === Math.ceil(users.length / rowsPerPage)
+  const isLastPage = page + 1 === Math.ceil(usersOnDisplay.length / rowsPerPage)
   const hasOnlyOnePageEntry = rowsPerPage - emptyRows === 1
   
+  const handleFilterInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { name, value } = e.target
+    setPage(0)
+    setFilters((old) => ({
+      ...old,
+      [name]: value
+    }))
+  }
+
   const deleteCallback = () => {
     if (isLastPage && !isFirstPage && hasOnlyOnePageEntry) setPage((old) => old - 1)
     fetchUsers()
   }  
-
+  
   return (
     <main>
       <HeaderWrapper>
@@ -47,24 +74,18 @@ const User: FC = () => {
         </Typography>
         <div className='filters'>
           <TextField
-            label="search"
             size="small"
-            placeholder="name"
+            label="username"
+            name="username"
+            onChange={handleFilterInputChange}
           />
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel id="words-status-select" size="small">Status</InputLabel>
-            <Select
-              labelId="words-status-select"
-              label="Status"
-              value={fiter}
-              size="small"
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <MenuItem value={''}>all</MenuItem>
-              <MenuItem value={'allowed'}>allowed</MenuItem>
-              <MenuItem value={'banned'}>banned</MenuItem>
-            </Select>
-          </FormControl>
+          <TextField
+            size="small"
+            label="email"
+            name="email"
+            onChange={handleFilterInputChange}
+          />
+
           <Button
             variant="contained"
             onClick={() => navigate('/dash/user/new')}
@@ -84,7 +105,7 @@ const User: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {users
+              {usersOnDisplay
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => <UserTableEntry key={user.id} user={user} deleteCallback={deleteCallback} />
               )}
@@ -103,7 +124,7 @@ const User: FC = () => {
         </TableContainer>
         <TablePagination
           component="div"
-          count={users.length}
+          count={usersOnDisplay.length}
           page={page}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
