@@ -2,11 +2,17 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import userResource from '../../services/api/userResource'
 import { User } from '../../types'
 import DeleteModal from '../DeleteModal'
 
-const UserTableEntry: FC<{ user: User }> = ({ user }) => {
-  const { id, name, status } = user
+type Props = {
+  user: User
+  deleteCallback: () => void
+}
+
+const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
+  const { id, username, email } = user
   const navigate = useNavigate()
 
   const [rowClickEnabled, setRowClickEnabled] = useState(true)
@@ -22,20 +28,26 @@ const UserTableEntry: FC<{ user: User }> = ({ user }) => {
     navigate('/dash/user/' + id)
   }
 
-  const handleDelete = () => {
-    console.log('delete', name)
+  const handleDelete = async () => {
+    const success = await userResource.delete(id)
+
+    if (!success) {
+      return alert('Failed to delete user')
+    }
+
+    alert('User deleted')
+    deleteCallback()
     closeModal()
   }
 
   return (
     <TableRow
-      key={id}
       hover={rowClickEnabled}
       role="button"
       onClick={handleRowClick}
     >
-      <TableCell>{name}</TableCell>
-      <TableCell>{status}</TableCell>
+      <TableCell component="th">{username}</TableCell>
+      <TableCell>{email}</TableCell>
       <TableCell align="right">
         <IconButton
           onClick={openModal}
@@ -49,7 +61,7 @@ const UserTableEntry: FC<{ user: User }> = ({ user }) => {
           onDelete={handleDelete}
           onClose={closeModal}
         >
-          <Typography>User: {name}</Typography>
+          <Typography>User: {username}</Typography>
         </DeleteModal>
       </TableCell>
     </TableRow>

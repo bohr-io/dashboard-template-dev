@@ -2,12 +2,8 @@ import styled from '@emotion/styled';
 import { Button, FormControl, InputLabel, MenuItem, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import data from '../assets/fakeUserData';
 import UserTableEntry from '../components/UserTableEntry';
-
-const PageWrapper = styled.main`
-  width: 100%;
-`
+import useUser from '../contexts/UserContext';
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -28,17 +24,23 @@ const HeaderWrapper = styled.header`
 
 const User: FC = () => {
   const navigate = useNavigate()
+  const { users, fetchUsers } = useUser()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [fiter, setFilter] = useState('')
 
-  const isLastPage = page + 1 === Math.ceil(data.length / rowsPerPage)
-  if (isLastPage) console.log('last page')
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0
+  const isFirstPage = page === 0
+  const isLastPage = page + 1 === Math.ceil(users.length / rowsPerPage)
+  const hasOnlyOnePageEntry = rowsPerPage - emptyRows === 1
+  
+  const deleteCallback = () => {
+    if (isLastPage && !isFirstPage && hasOnlyOnePageEntry) setPage((old) => old - 1)
+    fetchUsers()
+  }  
 
   return (
-    <PageWrapper>
+    <main>
       <HeaderWrapper>
         <Typography variant="h1">
           User
@@ -76,21 +78,21 @@ const User: FC = () => {
           <Table sx={{ minWidth: 600 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>Username</TableCell>
+                <TableCell>Email</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {data
+              {users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user) => <UserTableEntry key={user.id} user={user} />
+                .map((user) => <UserTableEntry key={user.id} user={user} deleteCallback={deleteCallback} />
               )}
 
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: 53 * emptyRows,
+                    height: 73 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={3} />
@@ -101,7 +103,7 @@ const User: FC = () => {
         </TableContainer>
         <TablePagination
           component="div"
-          count={data.length}
+          count={users.length}
           page={page}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -114,7 +116,7 @@ const User: FC = () => {
           }}
         />
       </Paper>
-    </PageWrapper>
+    </main>
   )
 }
 
