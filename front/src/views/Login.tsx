@@ -1,8 +1,10 @@
 import { Button, TextField, Typography } from '@mui/material'
 import Head from 'next/head'
-import { FC, FormEvent, useState } from 'react'
+import { FC, FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Reaptcha from 'reaptcha'
+import loginResource from '../services/api/loginResource'
+
 import styles from '../styles/Home.module.css'
 
 const REACAPTCHA_SITE_KEY = "6Lc2OG4hAAAAAF_Wx9HXq3O-FKTmyG_eOamPyykl"
@@ -19,20 +21,14 @@ const Login: FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    
-    fetch('/api/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        username,
-        password,
-        recaptchaToken
-      })
+    const loginSuccess = await loginResource.login({
+      username,
+      password,
+      recaptchaToken,
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) navigate('/dash/home')
-        else alert('Login fail')
-      })
+
+    if (loginSuccess) navigate('/dash/home')
+    else alert('Login fail')
   }
   
   return (
