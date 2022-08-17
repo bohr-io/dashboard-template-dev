@@ -1,20 +1,37 @@
 type RequestConfig = Omit<RequestInit, 'method' | 'body'>
 
 class ApiClient {
-  get authToken() {
-    const cookies = document.cookie.split('; ')
-    const authToken = cookies.find((cookie) => cookie.startsWith('TOKEN='))?.split('=')[1]
+  async get(path: string, config: RequestConfig = {}) {
+    try {
+      const response = await fetch('/api' + path, {
+        method: 'GET',
+        ...config
+      })
 
-    return authToken
-  }
-  
-  async get(path: string) {
+      return response.json()
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async post(path: string, bodyData: object, config: RequestConfig = {}) {
     try {
       const response = await fetch('/api' + path, {
         method: 'POST',
+        body: JSON.stringify(bodyData),
+        ...config
+      })
+  
+      return response.json()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async delete(path: string, bodyData: object, config: RequestConfig = {}) {
+    try {
+      const response = await fetch('/api' + path, {
+        method: 'DELETE',
         body: JSON.stringify(bodyData),
         ...config
       })
