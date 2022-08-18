@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router-dom'
+import Error500Modal from '../Error500Modal'
 import Sidebar from '../Sidebar'
 
 const DashLayoutWrapper = styled.div`
@@ -14,6 +15,7 @@ const DashPageContainer = styled.div`
 const DashLayout = () => {
   return (
     <DashLayoutWrapper>
+      <Error500Modal />
       <Sidebar />
       <DashPageContainer>
         <Outlet />

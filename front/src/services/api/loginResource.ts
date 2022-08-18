@@ -8,8 +8,9 @@ type LoginBodyData = {
 
 class LoginResource {
   async login(loginBody: LoginBodyData) {
-    const { success } = await apiClient.post('/login', loginBody)
-    return success
+    const data = await apiClient.post('/login', loginBody)
+    if (!data) return false
+    return data.success
   }
 }
 

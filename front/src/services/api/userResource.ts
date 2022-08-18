@@ -7,20 +7,23 @@ interface UserBody extends Omit<User, 'id'> {
 
 class UserResource {
   async get() {
-    const { items } = await apiClient.get('/user')
-    return items
+    const data = await apiClient.get('/user')
+    if (!data) return null
+    return data.items
   }
 
   async post(userBody: UserBody) {
-    const { success } = await apiClient.post('/user', userBody)
-    return success
+    const data = await apiClient.post('/user', userBody)
+    if (!data) return false
+    return data.success
   }
-
+  
   async delete(userId: string) {
-    const { success } = await apiClient.delete('/user', {
+    const data = await apiClient.delete('/user', {
       id: userId
     })
-    return success
+    if (!data) return false
+    return data.success
   }
 }
 
