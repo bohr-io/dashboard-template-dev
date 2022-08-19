@@ -16,6 +16,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
   const { showToast } = useUser()
   const { id, username, email } = user
   const navigate = useNavigate()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const [rowClickEnabled, setRowClickEnabled] = useState(true)
   const allowRowClick = () => setRowClickEnabled(true)
@@ -31,6 +32,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
   }
 
   const handleDelete = async () => {
+    setIsDeleting(true)
     const success = await userResource.delete(id)
 
     if (!success) {
@@ -38,6 +40,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
         severity: 'error',
         message: 'Failed to delete user',
       })
+      setIsDeleting(false)
       return
     }
 
@@ -68,6 +71,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
         <UserDeleteModal
           user={user}
           isOpen={isModalOpen}
+          isDeleting={isDeleting}
           onDelete={handleDelete}
           onClose={closeModal}
         />
