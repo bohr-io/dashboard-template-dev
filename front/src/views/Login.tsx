@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { FC, FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Reaptcha from 'reaptcha'
+import useToast from '../hooks/useToast'
 import loginResource from '../services/api/loginResource'
 
 import styles from '../styles/Home.module.css'
@@ -10,6 +11,7 @@ import styles from '../styles/Home.module.css'
 const REACAPTCHA_SITE_KEY = "6Lc2OG4hAAAAAF_Wx9HXq3O-FKTmyG_eOamPyykl"
 
 const Login: FC = () => {
+  const { Toast, showToast } = useToast()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -28,7 +30,10 @@ const Login: FC = () => {
     })
 
     if (loginSuccess) navigate('/dash/home')
-    else alert('Login fail')
+    else showToast({
+      severity: 'error',
+      message: 'Login fail'
+    })
   }
   
   return (
@@ -80,6 +85,7 @@ const Login: FC = () => {
           </Button>
         </form>
       </main>
+      {/* <Toast /> */}
     </div>
   )
 }

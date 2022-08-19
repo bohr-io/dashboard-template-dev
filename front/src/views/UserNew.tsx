@@ -10,7 +10,7 @@ const initialFormData = {
 }
 
 export default function UserNew() {
-  const { fetchUsers } = useUser()
+  const { fetchUsers, showToast } = useUser()
   const [formData, setFormData] = useState(initialFormData)
 
   const handleSubmit: FormEventHandler<HTMLElement> = async (e) => {
@@ -21,11 +21,18 @@ export default function UserNew() {
     })
 
     if (!success) {
-      return alert('Failed to create user')
+      showToast({
+        severity: 'error',
+        message: 'Failed to create user',
+      })
+      return
     }
 
-    alert('User created')
     setFormData(initialFormData)
+    showToast({
+      severity: 'success',
+      message: 'User created',
+    })
     fetchUsers()
   }
 

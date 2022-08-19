@@ -2,6 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import { IconButton, TableCell, TableRow } from '@mui/material'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import useUser from '../../contexts/UserContext'
 import userResource from '../../services/api/userResource'
 import { User } from '../../types'
 import UserDeleteModal from '../UserDeleteModal'
@@ -12,6 +13,7 @@ type Props = {
 }
 
 const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
+  const { showToast } = useUser()
   const { id, username, email } = user
   const navigate = useNavigate()
 
@@ -32,12 +34,19 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
     const success = await userResource.delete(id)
 
     if (!success) {
-      return alert('Failed to delete user')
+      showToast({
+        severity: 'error',
+        message: 'Failed to delete user',
+      })
+      return
     }
 
-    alert('User deleted')
     deleteCallback()
     closeModal()
+    showToast({
+      severity: 'success',
+      message: 'User deleted',
+    })
   }
 
   return (

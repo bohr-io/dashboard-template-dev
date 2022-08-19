@@ -6,7 +6,7 @@ import userResource from '../services/api/userResource';
 
 export default function UserDetail() {
   const { userId: idParam } = useParams();
-  const { users, fetchUsers } = useUser()
+  const { users, fetchUsers, showToast } = useUser()
   const [formData, setFormData] = useState({
       id: '',
       username: '',
@@ -30,10 +30,17 @@ export default function UserDetail() {
     const success = await userResource.post(formData)
 
     if (!success) {
-      return alert('Failed to update user')
+      showToast({
+        severity: 'error',
+        message: 'Failed to update user'
+      })
+      return
     }
     
-    alert('user updated')
+    showToast({
+      severity: 'success',
+      message: 'User updated'
+    })
     fetchUsers()
   }
 
