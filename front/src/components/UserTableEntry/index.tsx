@@ -1,10 +1,10 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton, TableCell, TableRow, Typography } from '@mui/material'
+import { IconButton, TableCell, TableRow } from '@mui/material'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import userResource from '../../services/api/userResource'
 import { User } from '../../types'
-import DeleteModal from '../DeleteModal'
+import UserDeleteModal from '../UserDeleteModal'
 
 type Props = {
   user: User
@@ -56,13 +56,12 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
         >
           <DeleteIcon color="warning" />
         </IconButton>
-        <DeleteModal
+        <UserDeleteModal
+          user={user}
           isOpen={isModalOpen}
           onDelete={handleDelete}
           onClose={closeModal}
-        >
-          <Typography>User: {username}</Typography>
-        </DeleteModal>
+        />
       </TableCell>
     </TableRow>
   )
