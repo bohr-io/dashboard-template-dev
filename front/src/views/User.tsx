@@ -1,61 +1,44 @@
+import { ThemeProvider } from '@emotion/react';
 import styled from '@emotion/styled';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
-import { ChangeEventHandler, FC, useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
-import { User } from '../types';
+import theme from '../theme';
 
 const HeaderWrapper = styled.header`
   width: 100%;
   padding-bottom: 20px;
   border-bottom: 1px solid black;
   margin-bottom: 20px;
-
-  .filters {
-    width: 100%;
-    display: flex;
-    gap: 10px;
-
-    & > :last-child {
-      margin-left: auto;
-    }
-  }
 `
-
-const filterUsers = (users: User[], filters: [string, string][]) => {
-  return users.filter((user) => {
-    const fieldMatchs = filters.map(([key, value]) => {
-      return user[key as keyof User].match(value)
-    })
-    return fieldMatchs.every((match) => match)
-  })
-}
 
 const User: FC = () => {
   const navigate = useNavigate()
   const { users, fetchUsers } = useUser()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [filters, setFilters] = useState({
+  const [searchForm, setSearchForm] = useState({
     username: '',
     email: '',
   })
 
-  const filtersEntries = Object.entries(filters).filter(([key, value]) => value.length > 0)
-  const usersOnDisplay = filtersEntries.length > 0
-                       ? filterUsers(users, filtersEntries)
-                       : users
-  
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - usersOnDisplay.length) : 0
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0
   const isFirstPage = page === 0
-  const isLastPage = page + 1 === Math.ceil(usersOnDisplay.length / rowsPerPage)
+  const isLastPage = page + 1 === Math.ceil(users.length / rowsPerPage)
   const hasOnlyOnePageEntry = rowsPerPage - emptyRows === 1
   
-  const handleFilterInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleSearchSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault()
+    console.log(searchForm)
+  }  
+
+  const handleSearchFormChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target
     setPage(0)
-    setFilters((old) => ({
+    setSearchForm((old) => ({
       ...old,
       [name]: value
     }))
@@ -67,32 +50,48 @@ const User: FC = () => {
   }  
   
   return (
+    <ThemeProvider theme={theme}>
     <main>
       <HeaderWrapper>
         <Typography variant="h1">
           User
         </Typography>
-        <div className='filters'>
-          <TextField
-            size="small"
-            label="username"
-            name="username"
-            onChange={handleFilterInputChange}
-          />
-          <TextField
-            size="small"
-            label="email"
-            name="email"
-            onChange={handleFilterInputChange}
-          />
+        <Box sx={{ width: '100%', display: 'flex' }}>
+          <Box
+            component="form"
+            onSubmit={handleSearchSubmit}
+          >
+            <TextField
+              size="small"
+              label="username"
+              name="username"
+              onChange={handleSearchFormChange}
+            />
+            <TextField
+              size="small"
+              label="email"
+              name="email"
+              onChange={handleSearchFormChange}
+              sx={{ ml: 1 }}
+            />
+            <Button
+              aria-label="find user"
+              type="submit"
+              variant="contained"
+              sx={{ ml: 1 }}
+            >
+              <SearchIcon />
+            </Button>
+          </Box>
 
           <Button
             variant="contained"
             onClick={() => navigate('/dash/user/new')}
+            sx={{ ml: 'auto' }}
           >
             New User
           </Button>
-        </div>
+        </Box>
       </HeaderWrapper>
       <Paper sx={{ minWidth: '100%' }}>
         <TableContainer>
@@ -105,7 +104,7 @@ const User: FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {usersOnDisplay
+              {users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => <UserTableEntry key={user.id} user={user} deleteCallback={deleteCallback} />
               )}
@@ -124,7 +123,7 @@ const User: FC = () => {
         </TableContainer>
         <TablePagination
           component="div"
-          count={usersOnDisplay.length}
+          count={users.length}
           page={page}
           rowsPerPage={rowsPerPage}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
@@ -138,6 +137,7 @@ const User: FC = () => {
         />
       </Paper>
     </main>
+    </ThemeProvider>
   )
 }
 
