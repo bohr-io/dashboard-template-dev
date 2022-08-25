@@ -14,10 +14,6 @@ export default function UserDetail() {
       password: '',
   });
 
-  const [isEditable, setIsEditable] = useState(false)
-  const enableEdit = () => setIsEditable(true)
-  const disableEdit = () => setIsEditable(false)
-
   const user = users.find((user) => user.id === idParam)
 
   useEffect(() => {
@@ -52,10 +48,9 @@ export default function UserDetail() {
     }))
   }
 
-  const handleReset = () => {
+  const handleCancel = () => {
     if (!user) return
     setFormData({ ...user })
-    disableEdit()
   }
 
   return (
@@ -90,9 +85,6 @@ export default function UserDetail() {
             name="username"
             value={formData.username}
             onChange={handleFormChange}
-            inputProps={{
-              readOnly: !isEditable
-            }}
           />
           <TextField
             id="password"
@@ -100,9 +92,6 @@ export default function UserDetail() {
             name="password"
             value={formData.password}
             onChange={handleFormChange}
-            inputProps={{
-              readOnly: !isEditable
-            }}
           />
           <TextField
             id="email"
@@ -110,32 +99,18 @@ export default function UserDetail() {
             name="email"
             value={formData.email}
             onChange={handleFormChange}
-            inputProps={{
-              readOnly: !isEditable
-            }}
           />
         </CardContent>
         <CardActions>
-          {isEditable ? (
-            <>
-              <Button
-                type="button"
-                onClick={handleReset}
-              >
-                Reset
-              </Button>
-              <Button type="submit">
-                Submit
-              </Button>
-            </>
-          ) : (
-            <Button
-              type="button"
-              onClick={enableEdit}
-            >
-              Edit
-            </Button>
-          )}
+          <Button
+            type="button"
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <Button type="submit">
+            Submit
+          </Button>
         </CardActions>
       </Card>
     </main>
