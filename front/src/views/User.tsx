@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@emotion/react';
 import styled from '@emotion/styled';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
@@ -6,7 +5,6 @@ import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
-import theme from '../theme';
 
 const HeaderWrapper = styled.header`
   width: 100%;
@@ -50,7 +48,6 @@ const User: FC = () => {
   }  
   
   return (
-    <ThemeProvider theme={theme}>
     <main>
       <HeaderWrapper>
         <Typography variant="h1">
@@ -137,7 +134,6 @@ const User: FC = () => {
         />
       </Paper>
     </main>
-    </ThemeProvider>
   )
 }
 

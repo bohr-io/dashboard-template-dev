@@ -57,6 +57,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
       hover={rowClickEnabled}
       role="button"
       onClick={handleRowClick}
+      sx={{ '&:hover': { cursor: 'pointer' } }}
     >
       <TableCell component="th">{username}</TableCell>
       <TableCell>{email}</TableCell>
