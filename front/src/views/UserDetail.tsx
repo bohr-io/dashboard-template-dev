@@ -1,6 +1,7 @@
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
 import { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import useUser from '../contexts/UserContext';
 import userResource from '../services/api/userResource';
 
@@ -55,6 +56,11 @@ export default function UserDetail() {
 
   return (
     <main>
+      <Link to="/dash/user">
+        <Button startIcon={<ArrowBackIosIcon />}>
+          Back
+        </Button>
+      </Link>
       <Typography variant="h1">
         User: { user?.username }
       </Typography>
