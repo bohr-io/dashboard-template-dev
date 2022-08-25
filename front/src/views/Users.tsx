@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
 
@@ -13,7 +13,7 @@ const HeaderWrapper = styled.header`
   margin-bottom: 20px;
 `
 
-const User: FC = () => {
+const Users: FC = () => {
   const navigate = useNavigate()
   const { users, fetchUsers } = useUser()
   const [page, setPage] = useState(0)
@@ -51,7 +51,7 @@ const User: FC = () => {
     <main>
       <HeaderWrapper>
         <Typography variant="h1">
-          User
+          Users
         </Typography>
         <Box sx={{ width: '100%', display: 'flex' }}>
           <Box
@@ -83,7 +83,7 @@ const User: FC = () => {
 
           <Button
             variant="contained"
-            onClick={() => navigate('/dash/user/new')}
+            onClick={() => navigate('/dash/users/new')}
             sx={{ ml: 'auto' }}
           >
             New User
@@ -137,4 +137,4 @@ const User: FC = () => {
   )
 }
 
-export default User;
+export default Users;

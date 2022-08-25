@@ -56,7 +56,7 @@ export default function UserDetail() {
 
   return (
     <main>
-      <Link to="/dash/user">
+      <Link to="/dash/users">
         <Button startIcon={<ArrowBackIosIcon />}>
           Back
         </Button>

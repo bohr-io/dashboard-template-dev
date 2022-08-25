@@ -55,22 +55,35 @@ const Header: FC = () => {
       <PanelNav>
         <NavLinkList>
           <li>
-            Users
+            Data
             <NavLinkList>
               <li>
                 <Link
                   color="white"
-                  to="user"
+                  to="types"
                 >
-                  List
+                  Types
                 </Link>
               </li>
               <li>
                 <Link
                   color="white"
-                  to="user/new"
+                  to="records"
                 >
-                  New
+                  Records
+                </Link>
+              </li>
+            </NavLinkList>
+          </li>
+          <li>
+            System
+            <NavLinkList>
+              <li>
+                <Link
+                  color="white"
+                  to="users"
+                >
+                  Users
                 </Link>
               </li>
             </NavLinkList>

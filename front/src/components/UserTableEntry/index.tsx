@@ -28,7 +28,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
   
   const handleRowClick = () => {
     if (!rowClickEnabled || isModalOpen) return
-    navigate('/dash/user/' + id)
+    navigate('/dash/users/' + id)
   }
 
   const handleDelete = async () => {

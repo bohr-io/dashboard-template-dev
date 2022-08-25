@@ -5,9 +5,11 @@ import { UserProvider } from './contexts/UserContext'
 import theme from './theme'
 import Home from './views/Home'
 import Login from './views/Login'
-import User from './views/User'
+import Users from './views/Users'
 import UserDetail from './views/UserDetail'
 import UserNew from './views/UserNew'
+import Types from './views/Types'
+import Records from './views/Records'
 
 export default function Index() {
   return (
@@ -18,10 +20,16 @@ export default function Index() {
             <Route index element={<Login />} />
             <Route element={<DashLayout />}>
               <Route path="home" element={<Home />} />
-              <Route path="user" element={<UserProvider />}>
-                <Route index element={<User />} />
+              <Route path="users" element={<UserProvider />}>
+                <Route index element={<Users />} />
                 <Route path="new" element={<UserNew />} />
                 <Route path=":userId" element={<UserDetail />} />
+              </Route>
+              <Route path="types">
+                <Route index element={<Types />} />
+              </Route>
+              <Route path="records">
+                <Route index element={<Records />} />
               </Route>
             </Route>
           </Route>
