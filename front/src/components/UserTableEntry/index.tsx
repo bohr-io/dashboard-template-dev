@@ -62,6 +62,7 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
       <TableCell>{email}</TableCell>
       <TableCell align="right">
         <IconButton
+          aria-label="delete user"
           onClick={openModal}
           onMouseEnter={disallowRowClick}
           onMouseLeave={allowRowClick}

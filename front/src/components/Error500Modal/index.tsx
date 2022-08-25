@@ -52,6 +52,7 @@ const Error500Modal = () => {
     >
       <Box sx={modalBoxStyle}>
         <IconButton
+          aria-label="close"
           onClick={closeModal}
           sx={closeBtnStyle}
         >

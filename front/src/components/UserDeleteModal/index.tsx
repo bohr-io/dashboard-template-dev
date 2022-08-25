@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { User } from '../../types';
 
 const boxStyle = {
@@ -27,7 +27,7 @@ type Props = {
   isOpen: boolean
 }
 
-const DeleteModal: FC<Props> = ({ user, onClose, onDelete, isDeleting, isOpen }) => {
+const UserDeleteModal: FC<Props> = ({ user, onClose, onDelete, isDeleting, isOpen }) => {
   return (
     <Modal
       open={isOpen}
@@ -81,4 +81,4 @@ const DeleteModal: FC<Props> = ({ user, onClose, onDelete, isDeleting, isOpen })
   )
 }
 
-export default DeleteModal
+export default UserDeleteModal
