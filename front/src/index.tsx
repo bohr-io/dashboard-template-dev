@@ -7,7 +7,6 @@ import Home from './views/Home'
 import Login from './views/Login'
 import Users from './views/Users'
 import UserDetail from './views/UserDetail'
-import UserNew from './views/UserNew'
 import Types from './views/Types'
 import Records from './views/Records'
 
@@ -22,7 +21,7 @@ export default function Index() {
               <Route path="home" element={<Home />} />
               <Route path="users" element={<UserProvider />}>
                 <Route index element={<Users />} />
-                <Route path="new" element={<UserNew />} />
+                <Route path="new" element={<UserDetail />} />
                 <Route path=":userId" element={<UserDetail />} />
               </Route>
               <Route path="types">

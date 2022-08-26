@@ -5,15 +5,17 @@ import { Link, useParams } from 'react-router-dom';
 import useUser from '../contexts/UserContext';
 import userResource from '../services/api/userResource';
 
+const initialFormData = {
+  username: '',
+  email: '',
+  password: '',
+}
+
 export default function UserDetail() {
-  const { userId: idParam } = useParams();
+  const { userId: idParam } = useParams()
   const { users, fetchUsers, showToast } = useUser()
-  const [formData, setFormData] = useState({
-      id: '',
-      username: '',
-      email: '',
-      password: '',
-  });
+  const [isResetDisabled, setIsResetDisabled] = useState(true)
+  const [formData, setFormData] = useState(initialFormData)
 
   const user = users.find((user) => user.id === idParam)
 
@@ -22,9 +24,18 @@ export default function UserDetail() {
     setFormData({ ...user })
   }, [user])
 
+  const handleReset = () => {
+    setIsResetDisabled(true)
+    if (user) setFormData({ ...user })
+    else setFormData(initialFormData)
+  }
+
   const handleSubmit: FormEventHandler<HTMLElement> = async (e) => {
     e.preventDefault()
-    const success = await userResource.post(formData)
+    const success = await userResource.post({
+      ...formData,
+      id: user ? user.id : null
+    })
 
     if (!success) {
       showToast({
@@ -36,22 +47,22 @@ export default function UserDetail() {
     
     showToast({
       severity: 'success',
-      message: 'User updated'
+      message: user ? 'User updated' : 'User created'
     })
+
     fetchUsers()
+
+    setIsResetDisabled(true)
+    if (!user) setFormData(initialFormData)
   }
 
   const handleFormChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target
+    setIsResetDisabled(false)
     setFormData((old) => ({
       ...old,
       [name]: value
     }))
-  }
-
-  const handleCancel = () => {
-    if (!user) return
-    setFormData({ ...user })
   }
 
   return (
@@ -62,7 +73,7 @@ export default function UserDetail() {
         </Button>
       </Link>
       <Typography variant="h1">
-        User: { user?.username }
+        {user ? `User: ${user.username}` : 'New User' }
       </Typography>
       <Card
         component="form"
@@ -75,16 +86,15 @@ export default function UserDetail() {
             gap: 1.5,
           }}
         >
-          <TextField
+          {user && (<TextField
             id="id"
             label="id"
             name="id"
-            value={user?.id || ''}
-            onChange={handleFormChange}
+            value={user?.id}
             inputProps={{
               readOnly: true
             }}
-          />
+          />)}
           <TextField
             id="username"
             label="username"
@@ -108,11 +118,17 @@ export default function UserDetail() {
           />
         </CardContent>
         <CardActions>
+          <Link to="/dash/users">
+            <Button>
+              Cancel
+            </Button>
+          </Link>          
           <Button
             type="button"
-            onClick={handleCancel}
+            onClick={handleReset}
+            disabled={isResetDisabled}
           >
-            Cancel
+            Reset
           </Button>
           <Button type="submit">
             Submit
