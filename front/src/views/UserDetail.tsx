@@ -14,7 +14,6 @@ const initialFormData = {
 export default function UserDetail() {
   const { userId: idParam } = useParams()
   const { users, fetchUsers, showToast } = useUser()
-  const [isResetDisabled, setIsResetDisabled] = useState(true)
   const [formData, setFormData] = useState(initialFormData)
 
   const user = users.find((user) => user.id === idParam)
@@ -23,12 +22,6 @@ export default function UserDetail() {
     if (!user) return
     setFormData({ ...user })
   }, [user])
-
-  const handleReset = () => {
-    setIsResetDisabled(true)
-    if (user) setFormData({ ...user })
-    else setFormData(initialFormData)
-  }
 
   const handleSubmit: FormEventHandler<HTMLElement> = async (e) => {
     e.preventDefault()
@@ -52,13 +45,11 @@ export default function UserDetail() {
 
     fetchUsers()
 
-    setIsResetDisabled(true)
     if (!user) setFormData(initialFormData)
   }
 
   const handleFormChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target
-    setIsResetDisabled(false)
     setFormData((old) => ({
       ...old,
       [name]: value
@@ -123,13 +114,6 @@ export default function UserDetail() {
               Cancel
             </Button>
           </Link>          
-          <Button
-            type="button"
-            onClick={handleReset}
-            disabled={isResetDisabled}
-          >
-            Reset
-          </Button>
           <Button type="submit">
             Submit
           </Button>
