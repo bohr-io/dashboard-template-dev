@@ -1,20 +1,30 @@
 import { ThemeProvider } from '@emotion/react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import DashLayout from './components/DashLayout'
 import { UserProvider } from './contexts/UserContext'
 import theme from './theme'
 import Home from './views/Home'
 import Login from './views/Login'
-import Users from './views/Users'
-import UserDetail from './views/UserDetail'
-import Types from './views/Types'
 import Records from './views/Records'
+import Types from './views/Types'
+import UserDetail from './views/UserDetail'
+import Users from './views/Users'
+
+const ToDash = () => {
+  const navigate = useNavigate()
+  useEffect(() => {
+    if (location.pathname === '/' || '') navigate('/dash', { replace: true })
+  }, [navigate])
+  return null
+}
 
 export default function Index() {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
+          <Route index element={<ToDash />} />
           <Route path="dash">
             <Route index element={<Login />} />
             <Route element={<DashLayout />}>
