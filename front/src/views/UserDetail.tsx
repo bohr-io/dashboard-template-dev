@@ -1,7 +1,7 @@
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material';
 import { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useUser from '../contexts/UserContext';
 import userResource from '../services/api/userResource';
 
@@ -12,6 +12,7 @@ const initialFormData = {
 }
 
 export default function UserDetail() {
+  const navigate = useNavigate()
   const { userId: idParam } = useParams()
   const { users, fetchUsers, showToast } = useUser()
   const [formData, setFormData] = useState(initialFormData)
@@ -44,8 +45,7 @@ export default function UserDetail() {
     })
 
     fetchUsers()
-
-    if (!user) setFormData(initialFormData)
+    navigate('/dash/users')
   }
 
   const handleFormChange: ChangeEventHandler<HTMLInputElement> = (e) => {
