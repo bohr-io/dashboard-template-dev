@@ -1,97 +1,106 @@
-import styled from '@emotion/styled';
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 
-const SidebarWrapper = styled.aside`
-  position: sticky;
-  top: 0;
-  padding: 5px 20px;
-  background-color: rgb(130, 10, 209);
-  color: rgb(255, 255, 255);
-  width: 200px;
-  height: 100vh;
-  flex-grow: 0;
-  flex-shrink: 0;
-`
+const Logo = () => (
+  <Link to="/dash/home">
+    <Box
+      sx={{
+        paddingBlock: 4.25,
+        paddingInline: 4.75,
+        mb: 5.125,
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: 24,
+          fontWeight: 700,
+        }}
+      >
+        Dashboard
+      </Typography>
+    </Box>
+  </Link>
+)
 
-const LogoWrapper = styled.div`
-  text-align: center;
-`
+const SideBar = () => {
+  const theme = useTheme()
+  const navigate = useNavigate()
 
-const PanelNav = styled.nav`
-`
-
-const NavLinkList = styled.ul`
-  list-style: none;
-  margin: unset;
-  padding: unset;
-
-  li {
-    margin-top: 5px;
+  const linkCategorys = {
+    data: [
+      { name: 'types', to: '/dash/types' },
+      { name: 'records', to: '/dash/records' },
+    ],
+    system: [
+      { name: 'users', to: '/dash/users' },
+    ]
   }
 
-  & & {
-    padding-left: 2em;
-  }
-
-  & + & {
-    margin-top: 1em;
-  }
-`
-
-const Header: FC = () => {
   return (
-    <SidebarWrapper>
-      <LogoWrapper>
-        <p>
-          <Link
-            color="white"
-            to="home"
-          >
-            Dashboard
-          </Link>
-        </p>
-      </LogoWrapper>
-      <PanelNav>
-        <NavLinkList>
-          <li>
-            Data
-            <NavLinkList>
-              <li>
-                <Link
-                  color="white"
-                  to="types"
-                >
-                  Types
-                </Link>
-              </li>
-              <li>
-                <Link
-                  color="white"
-                  to="records"
-                >
-                  Records
-                </Link>
-              </li>
-            </NavLinkList>
-          </li>
-          <li>
-            System
-            <NavLinkList>
-              <li>
-                <Link
-                  color="white"
-                  to="users"
-                >
-                  Users
-                </Link>
-              </li>
-            </NavLinkList>
-          </li>
-        </NavLinkList>
-      </PanelNav>
-    </SidebarWrapper>
-  );
+    <Box
+      component="aside"
+      sx={{
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
+        minWidth: '255px',
+        minHeight: '100vh',
+      }}
+    >
+      <Logo />
+      <nav>
+        <List>
+          {Object.entries(linkCategorys).map(([category, links]) => (
+            <ListItem key={category} sx={{ flexWrap: 'wrap', p: 0 }}>
+              <ListItemText
+                primary={category}
+                primaryTypographyProps={{
+                  textTransform: 'capitalize',
+                  fontSize: 18
+                }}
+                sx={{ pl: 4.75 }}
+              />
+              <List sx={{ width: '100%' }}>
+                {links.map(({ name, to }) => (
+                  <ListItem key={name}
+                    disablePadding
+                    sx={{ '&:hover .MuiTypography-root': { fontWeight: 700 } }}
+                  >
+                    <ListItemButton
+                      key={name}
+                      LinkComponent='a'
+                      href={to}
+                      sx={{
+                        pl: 4.75,
+                        paddingBlock: 1.3125,
+                        '&:hover': { backgroundColor: 'primary.light' },
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        navigate(to)
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: '32px' }}>
+                        <svg width="6" height="6" viewBox="0 0 6 6" fill="none">
+                          <rect width="6" height="6" rx="6" fill={theme.palette.primary.contrastText} />
+                        </svg>
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={name}
+                        primaryTypographyProps={{
+                          textTransform: 'capitalize',
+                          fontSize: 18
+                        }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </ListItem>
+          ))}
+        </List>
+      </nav>
+    </Box>
+  )
 }
 
-export default Header;
+export default SideBar
