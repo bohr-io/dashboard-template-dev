@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import DashLayout from './components/DashLayout'
 import { UserProvider } from './contexts/UserContext'
 import theme from './theme'
+import Error404 from './views/Error404'
 import Home from './views/Home'
 import Login from './views/Login'
 import Records from './views/Records'
@@ -42,7 +43,7 @@ export default function Index() {
               </Route>
             </Route>
           </Route>
-          <Route path="*" element={<h1>404</h1>} />
+          <Route path="*" element={<Error404 />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
