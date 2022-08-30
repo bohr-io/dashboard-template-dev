@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from '@mui/material'
 import Head from 'next/head'
-import { FC, FormEvent, useEffect, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Reaptcha from 'reaptcha'
 import useToast from '../hooks/useToast'
@@ -85,7 +85,7 @@ const Login: FC = () => {
           </Button>
         </form>
       </main>
-      {/* <Toast /> */}
+      <Toast />
     </div>
   )
 }
