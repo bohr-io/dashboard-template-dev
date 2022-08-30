@@ -82,14 +82,14 @@ const Users: FC = () => {
           label="email"
           name="email"
           onChange={handleSearchFormChange}
-          sx={{ ml: 1 }}
+          sx={{ ml: 3.75 }}
         />
         <Button
           aria-label="find user"
           title="find user"
           type="submit"
           variant="contained"
-          sx={{ ml: 1, p: 1, minWidth: 'max-content' }}
+          sx={{ ml: 3.75, p: 1, minWidth: 'max-content' }}
         >
           <SearchIcon />
         </Button>
