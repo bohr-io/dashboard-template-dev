@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
 import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
 
 const HeaderWrapper = styled.header`
+  display: flex;
   width: 100%;
-  padding-bottom: 20px;
-  border-bottom: 1px solid black;
-  margin-bottom: 20px;
+  align-items: center;
 `
 
 const Users: FC = () => {
@@ -53,44 +53,48 @@ const Users: FC = () => {
         <Typography variant="h1">
           Users
         </Typography>
-        <Box sx={{ width: '100%', display: 'flex' }}>
-          <Box
-            component="form"
-            onSubmit={handleSearchSubmit}
-          >
-            <TextField
-              size="small"
-              label="username"
-              name="username"
-              onChange={handleSearchFormChange}
-            />
-            <TextField
-              size="small"
-              label="email"
-              name="email"
-              onChange={handleSearchFormChange}
-              sx={{ ml: 1 }}
-            />
-            <Button
-              aria-label="find user"
-              type="submit"
-              variant="contained"
-              sx={{ ml: 1 }}
-            >
-              <SearchIcon />
-            </Button>
-          </Box>
-
-          <Button
-            variant="contained"
-            onClick={() => navigate('/dash/users/new')}
-            sx={{ ml: 'auto' }}
-          >
-            New User
-          </Button>
-        </Box>
+        <Button
+          aria-label="add user"
+          title="add user"
+          variant="contained"
+          onClick={() => navigate('/dash/users/new')}
+          sx={{ ml: 'auto', p: 1, minWidth: 'max-content' }}
+        >
+          <AddRoundedIcon />
+        </Button>
       </HeaderWrapper>
-      <Paper sx={{ minWidth: '100%' }}>
+      <Paper
+        component="form"
+        onSubmit={handleSearchSubmit}
+        sx={{ p: 4, mt: 4.5, mb: 3.75, borderRadius: '8px' }}
+      >
+        <Typography variant="h2" sx={{ mb: 2.375 }}>
+          Filter by
+        </Typography>
+        <TextField
+          size="small"
+          label="username"
+          name="username"
+          onChange={handleSearchFormChange}
+        />
+        <TextField
+          size="small"
+          label="email"
+          name="email"
+          onChange={handleSearchFormChange}
+          sx={{ ml: 1 }}
+        />
+        <Button
+          aria-label="find user"
+          title="find user"
+          type="submit"
+          variant="contained"
+          sx={{ ml: 1, p: 1, minWidth: 'max-content' }}
+        >
+          <SearchIcon />
+        </Button>
+      </Paper>
+      <Paper sx={{ minWidth: '100%', borderRadius: '8px' }}>
         <TableContainer>
           <Table sx={{ minWidth: 600 }}>
             <TableHead>

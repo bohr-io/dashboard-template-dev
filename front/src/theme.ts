@@ -17,6 +17,20 @@ const theme = createTheme({
       hover: `rgba(0, 0, 0, ${hoverOpacity})`,
     }
   },
+  typography: {
+    h1: {
+      fontWeight: 700,
+      fontSize: '30px',
+      lineHeight: '35px',
+      letterSpacing: '0.3px',
+    },
+    h2: {
+      fontWeight: 700,
+      fontSize: '18px',
+      lineHeight: '21px',
+      letterSpacing: '0.4px',
+    },
+  },
   components: {
     MuiButton: {
       styleOverrides: {
@@ -28,6 +42,17 @@ const theme = createTheme({
               color: theme.palette[color].contrastText,
             }
           }
+        }
+      }
+    },
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+        variant: 'outlined',
+      },
+      styleOverrides: {
+        outlined: {
+          border: '1px solid hsla(22, 17%, 12%, 0.5)'
         }
       }
     }
