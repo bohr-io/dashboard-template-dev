@@ -1,7 +1,7 @@
 type RequestConfig = Omit<RequestInit, 'method' | 'body'>
 
 const errorResponseHandlers: Record<Response['status'], (res: Response, errorData: { error: string }) => void> = {
-  401: () => { window.location.replace('http://localhost/dash') },
+  401: () => { window.location.replace('/dash') },
 
   500: (res, resData) => {
     const event500 = new CustomEvent('response500', { detail: {
