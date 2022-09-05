@@ -16,6 +16,7 @@ const Logo = () => (
         sx={{
           fontSize: 24,
           fontWeight: 700,
+          opacity: 0.9,
         }}
       >
         Dashboard
@@ -64,15 +65,36 @@ const SideBar = () => {
                 primary={category}
                 primaryTypographyProps={{
                   textTransform: 'capitalize',
-                  fontSize: 18
+                  fontSize: 18,
+                  sx: { opacity: 0.7 }
                 }}
                 sx={{ pl: 4.75 }}
               />
               <List sx={{ width: '100%' }}>
                 {links.map(({ name, to }) => (
-                  <ListItem key={name}
+                  <ListItem
+                    key={name}
                     disablePadding
-                    sx={{ '&:hover .MuiTypography-root': { fontWeight: 700 } }}
+                    sx={{
+                      position: 'relative',
+                      opacity: 0.7,
+                      '&:hover': {
+                        opacity: 1,
+                        '.MuiTypography-root': {
+                          fontWeight: 700
+                        },
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          width: 6,
+                          backgroundColor: 'primary.contrastText',
+                          zIndex: 1
+                        }
+                      }
+                    }}
                   >
                     <ListItemButton
                       key={name}
@@ -97,7 +119,8 @@ const SideBar = () => {
                         primary={name}
                         primaryTypographyProps={{
                           textTransform: 'capitalize',
-                          fontSize: 18
+                          fontSize: 18,
+                          fontWeight: 300
                         }}
                       />
                     </ListItemButton>
@@ -111,8 +134,15 @@ const SideBar = () => {
       <Button
         variant="contained"
         startIcon={<LogoutIcon fontSize='small' />}
-        sx={{ mt: 'auto', height: 83, borderRadius: 0 }}
         onClick={handleLogout}
+        sx={{
+          mt: 'auto',
+          height: 83,
+          borderRadius: 0,
+          fontWeight: 600,
+          fontSize: 14,
+          letterSpacing: 0.2,
+        }}
       >
         Logout
       </Button>
