@@ -1,6 +1,6 @@
 import { createTheme, PaletteColorOptions } from '@mui/material/styles';
 
-const hoverOpacity = 0.15
+const hoverOpacity = 0.2
 
 const theme = createTheme({
   palette: {
@@ -10,11 +10,17 @@ const theme = createTheme({
       dark: 'hsla(22, 17%, 2%, 1)',
       contrastText: 'hsla(22, 17%, 100%, 1)',
     },
+    secondary: {
+      light: 'hsla(30, 3%, 66%, 1)',
+      main: 'hsla(30, 3%, 56%, 1)',
+      dark: 'hsla(30, 3%, 46%, 1)',
+      contrastText: 'hsla(22, 17%, 12%, 1)',
+    },
     action: {
       focusOpacity: hoverOpacity,
       hoverOpacity: hoverOpacity,
-      focus: `rgba(0, 0, 0, ${hoverOpacity})`,
-      hover: `rgba(0, 0, 0, ${hoverOpacity})`,
+      focus: `hsla(23, 16%, 16%, ${hoverOpacity})`,
+      hover: `hsla(23, 16%, 16%, ${hoverOpacity})`,
     }
   },
   typography: {
@@ -30,6 +36,15 @@ const theme = createTheme({
       lineHeight: '21px',
       letterSpacing: '0.4px',
     },
+    subtitle1: {
+      fontWeight: 400,
+      fontSize: '14px',
+      lineHeight: '20px',
+      letterSpacing: '0.3px',
+    },
+  },
+  shape: {
+    borderRadius: '8px'
   },
   components: {
     MuiButton: {
