@@ -1,5 +1,7 @@
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout'
+import { Box, Button, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material'
+import { Link, useNavigate } from 'react-router-dom'
+import logoutResource from '../../services/api/logoutResource'
 
 const Logo = () => (
   <Link to="/dash/home">
@@ -36,10 +38,17 @@ const SideBar = () => {
     ]
   }
 
+  const handleLogout = async () => {
+    const successLogout = await logoutResource.logout()
+    if (successLogout) navigate('/dash')
+  }
+
   return (
     <Box
       component="aside"
       sx={{
+        display: 'flex',
+        flexDirection: 'column',
         backgroundColor: 'primary.main',
         color: 'primary.contrastText',
         minWidth: '255px',
@@ -99,6 +108,14 @@ const SideBar = () => {
           ))}
         </List>
       </nav>
+      <Button
+        variant="contained"
+        startIcon={<LogoutIcon fontSize='small' />}
+        sx={{ mt: 'auto', height: 83, borderRadius: 0 }}
+        onClick={handleLogout}
+      >
+        Logout
+      </Button>
     </Box>
   )
 }
