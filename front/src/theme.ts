@@ -1,4 +1,4 @@
-import { createTheme, PaletteColorOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 const hoverOpacity = 0.2
 
@@ -16,6 +16,9 @@ const theme = createTheme({
       dark: 'hsla(30, 3%, 46%, 1)',
       contrastText: 'hsla(22, 17%, 12%, 1)',
     },
+    background: {
+      input: 'hsla(210, 50%, 99%, 1)',
+    },
     action: {
       focusOpacity: hoverOpacity,
       hoverOpacity: hoverOpacity,
@@ -24,6 +27,7 @@ const theme = createTheme({
     }
   },
   typography: {
+    fontFamily: '"Roboto", sans-serif',
     h1: {
       fontWeight: 700,
       fontSize: '30px',
@@ -52,10 +56,22 @@ const theme = createTheme({
         root: ({ ownerState }) => {
           const color = ownerState.color === 'inherit' ? 'primary' : ownerState.color || 'primary'
           return {
+            fontWeight: 700,
             '&:hover': {
               backgroundColor: theme.palette[color].light,
               color: theme.palette[color].contrastText,
-            }
+            },
+            ...(ownerState.variant === 'outlined' && {
+              borderWidth: 2,
+              borderColor: theme.palette[color].main,
+              padding: '4px 14px',
+              '&:hover': {
+                borderWidth: 2,
+                borderColor: theme.palette[color].main,
+                backgroundColor: theme.palette[color].main,
+                color: theme.palette[color].contrastText,
+              },
+            })
           }
         }
       }

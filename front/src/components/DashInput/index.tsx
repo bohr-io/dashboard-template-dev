@@ -8,7 +8,9 @@ const Input = styled(OutlinedInput)(({ theme }) => ({
   '& .MuiInputBase-input': {
     position: 'relative',
     borderColor: theme.palette.secondary.main,
+    borderRadius: theme.shape.borderRadius,
     color: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.input,
   },
   '& .MuiInputBase-input:focus': {
     backgroundColor: theme.palette.action.focus,
@@ -31,8 +33,8 @@ type Props = InputProps & {
   inputLabelProps?: Omit<InputLabelProps, 'shrink' | 'htmlFor'>
 }
 
-const DashInput = ({ label, formControlProps, inputLabelProps, ...inputBaseProps }: Props) => (
-  <FormControl variant="standard" {...formControlProps}>
+const DashInput = ({ label, formControlProps, inputLabelProps, sx, ...inputBaseProps }: Props) => (
+  <FormControl variant="standard" sx={sx} {...formControlProps}>
     <Label {...inputLabelProps} shrink htmlFor={inputBaseProps.id}>
       {label}
     </Label>
