@@ -1,5 +1,5 @@
 import DeleteIcon from '@mui/icons-material/Delete'
-import { IconButton, TableCell, TableRow } from '@mui/material'
+import { IconButton, SxProps, TableCell, TableRow } from '@mui/material'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useUser from '../../contexts/UserContext'
@@ -10,6 +10,16 @@ import UserDeleteModal from '../UserDeleteModal'
 type Props = {
   user: User
   deleteCallback: () => void
+}
+
+const cellStyle: SxProps = {
+  fontWeight: 400,
+  fontSize: '15px',
+  lineHeight: '20px',
+  letterSpacing: '0.4px',
+  color: 'primary.main',
+  height: '40px',
+  p: 1.25,
 }
 
 const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
@@ -59,16 +69,31 @@ const UserTableEntry: FC<Props> = ({ user, deleteCallback }) => {
       onClick={handleRowClick}
       sx={{ '&:hover': { cursor: 'pointer' } }}
     >
-      <TableCell component="th">{username}</TableCell>
-      <TableCell>{email}</TableCell>
-      <TableCell align="right">
+      <TableCell
+        component="th"
+        align="left"
+        sx={cellStyle}
+      >
+        {username}
+      </TableCell>
+      <TableCell
+        align="left"
+        sx={cellStyle}
+      >
+        {email}
+      </TableCell>
+      <TableCell
+        align="right"
+        sx={{ p: 0 }}
+      >
         <IconButton
           aria-label="delete user"
+          size="small"
           onClick={openModal}
           onMouseEnter={disallowRowClick}
           onMouseLeave={allowRowClick}
         >
-          <DeleteIcon color="warning" />
+          <DeleteIcon color="primary" fontSize="small" />
         </IconButton>
         <UserDeleteModal
           user={user}

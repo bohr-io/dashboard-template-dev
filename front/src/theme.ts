@@ -86,6 +86,29 @@ const theme = createTheme({
           border: '1px solid hsla(22, 17%, 12%, 0.5)'
         }
       }
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: () => {
+          const color = theme.palette.primary.main
+          return {
+            backgroundColor: theme.palette.primary.main,
+            borderRadius: '2px',
+            textTransform: 'uppercase',
+            padding: '10px 20px 10px 10px',
+            boxShadow: `0px 0px 0px 1px hsl(0, 0%, 100%, 0.1), 0px 0px 0px 2px ${color}`,
+          }
+        },
+        arrow: () => {
+          const color = theme.palette.primary.main
+          return {
+            '&::before': {
+              backgroundColor: color,
+              backgroundImage: 'linear-gradient(0deg, hsl(0, 0%, 100%, 0.1), hsl(0, 0%, 100%, 0.1))',
+            }
+          }
+        }
+      }
     }
   }
 })

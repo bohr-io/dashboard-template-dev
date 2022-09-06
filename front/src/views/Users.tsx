@@ -1,9 +1,15 @@
 import styled from '@emotion/styled';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from '@mui/material';
-import { ChangeEventHandler, FC, FormEventHandler, useState } from 'react';
+import { Box, Button, IconButton, Paper, SxProps, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel, Tooltip, Typography } from '@mui/material';
+import { ChangeEventHandler, FC, FormEventHandler, useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DashInput from '../components/DashInput';
+import OrderIndicator from '../components/OrderIndicator';
 import UserTableEntry from '../components/UserTableEntry';
 import useUser from '../contexts/UserContext';
 
@@ -13,21 +19,36 @@ const HeaderWrapper = styled.header`
   align-items: center;
 `
 
+const tableHeaderCellStyle: SxProps = {
+  padding: 0,
+  paddingInline: 1.25,
+  pb: 2.5,
+  fontWeight: 700,
+  fontSize: '18px',
+  lineHeight: '20px',
+  letterSpacing: '0.4px',
+  color: 'primary.main',
+}
+
+type OrderState = {
+  field: 'username' | 'email'
+  direction: 'asc' | 'desc'
+}
+
+const orderReducer = (state: OrderState, newField: OrderState['field']) => ({
+  field: newField,
+  direction: state.direction === 'asc' ? 'desc' : 'asc' as OrderState['direction'],
+})
+
 const Users: FC = () => {
   const navigate = useNavigate()
   const { users, fetchUsers } = useUser()
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [order, setOrder] = useReducer(orderReducer, { field: 'username', direction: 'asc' })
   const [searchForm, setSearchForm] = useState({
     username: '',
     email: '',
   })
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0
-  const isFirstPage = page === 0
-  const isLastPage = page + 1 === Math.ceil(users.length / rowsPerPage)
-  const hasOnlyOnePageEntry = rowsPerPage - emptyRows === 1
-  
   const handleSearchSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     console.log(searchForm)
@@ -35,7 +56,6 @@ const Users: FC = () => {
 
   const handleSearchFormChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { name, value } = e.target
-    setPage(0)
     setSearchForm((old) => ({
       ...old,
       [name]: value
@@ -43,7 +63,6 @@ const Users: FC = () => {
   }
 
   const deleteCallback = () => {
-    if (isLastPage && !isFirstPage && hasOnlyOnePageEntry) setPage((old) => old - 1)
     fetchUsers()
   }  
   
@@ -53,89 +72,126 @@ const Users: FC = () => {
         <Typography variant="h1">
           Users
         </Typography>
-        <Button
-          aria-label="add user"
-          title="add user"
-          variant="contained"
-          onClick={() => navigate('/dash/users/new')}
-          sx={{ ml: 'auto', p: 1, minWidth: 'max-content' }}
-        >
-          <AddRoundedIcon />
-        </Button>
+        <Tooltip title="add user" arrow placement="left">
+          <Button
+            aria-label="add user"
+            variant="contained"
+            onClick={() => navigate('/dash/users/new')}
+            sx={{ ml: 'auto', p: 1, minWidth: 'max-content' }}
+          >
+            <AddRoundedIcon />
+          </Button>
+        </Tooltip>
       </HeaderWrapper>
       <Paper
         component="form"
         onSubmit={handleSearchSubmit}
-        sx={{ p: 4, mt: 4.5, mb: 3.75, borderRadius: '8px' }}
+        sx={{ paddingBlock: 3.375, paddingInline: 4, mt: 4.5, mb: 3.75 }}
       >
         <Typography variant="h2" sx={{ mb: 2.375 }}>
           Filter by
         </Typography>
-        <TextField
-          size="small"
-          label="username"
-          name="username"
-          onChange={handleSearchFormChange}
-        />
-        <TextField
-          size="small"
-          label="email"
-          name="email"
-          onChange={handleSearchFormChange}
-          sx={{ ml: 3.75 }}
-        />
-        <Button
-          aria-label="find user"
-          title="find user"
-          type="submit"
-          variant="contained"
-          sx={{ ml: 3.75, p: 1, minWidth: 'max-content' }}
-        >
-          <SearchIcon />
-        </Button>
+        <Box sx={{ display: 'flex', gap: 3.75 }}>
+          <DashInput
+            size="small"
+            label="username"
+            name="username"
+            placeholder="username"
+            onChange={handleSearchFormChange}
+          />
+          <DashInput
+            size="small"
+            label="email"
+            name="email"
+            placeholder="email@email.com"
+            onChange={handleSearchFormChange}
+          />
+          <Tooltip title="find user" arrow placement="left">
+            <Button
+              aria-label="find user"
+              type="submit"
+              variant="contained"
+              sx={{ mt: 'auto', p: 1, minWidth: 'max-content' }}
+            >
+              <SearchIcon />
+            </Button>
+          </Tooltip>
+        </Box>
       </Paper>
-      <Paper sx={{ minWidth: '100%', borderRadius: '8px' }}>
+      <Paper sx={{ paddingBlock: 3.375, paddingInline: 4, minWidth: '100%' }}>
         <TableContainer>
-          <Table sx={{ minWidth: 600 }}>
+          <Table sx={{ minWidth: '600px' }}>
             <TableHead>
               <TableRow>
-                <TableCell>Username</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell sx={tableHeaderCellStyle}>
+                  <TableSortLabel
+                    active={order.field === 'username'}
+                    IconComponent={() => (
+                      <OrderIndicator active={order.field === 'username'} order={order.direction} />
+                    )}
+                    onClick={() => setOrder('username')}
+                  >
+                    Username
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sx={tableHeaderCellStyle}>
+                <TableSortLabel
+                    active={order.field === 'email'}
+                    IconComponent={() => (
+                      <OrderIndicator active={order.field === 'email'} order={order.direction} />
+                    )}
+                    onClick={() => setOrder('email')}
+                  >
+                    Email
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sx={tableHeaderCellStyle} align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((user) => <UserTableEntry key={user.id} user={user} deleteCallback={deleteCallback} />
-              )}
-
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 73 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={3} />
-                </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          component="div"
-          count={users.length}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
-          showFirstButton
-          showLastButton
-          onPageChange={(e: unknown, newPage: number) => { setPage(newPage) }}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(parseInt(e.target.value, 10));
-            setPage(0);
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            pt: 0.75,
+            pl: 1.25,
+            width: '100%',
           }}
-        />
+        >
+          <Box>
+            <Typography sx={{
+              fontWeight: 600,
+              fontSize: '14px',
+              letterSpacing: '0.2px',
+            }}>
+              Total entrys: {users.length}
+            </Typography>
+          </Box>
+          <Box>
+            <IconButton size="small">
+              <FirstPageIcon sx={{ fontSize: '24px' }} />
+            </IconButton>
+            <IconButton size="small">
+              <NavigateBeforeIcon sx={{ fontSize: '24px' }} />
+            </IconButton>
+            <IconButton size="small" sx={{ fontSize: '14px', fontWeight: 600, minWidth: '34px', minHeight: '34px', color: 'primary.main' }}>
+              1
+            </IconButton>
+            <IconButton size="small">
+              <NavigateNextIcon sx={{ fontSize: '24px' }} />
+            </IconButton>
+            <IconButton size="small">
+              <LastPageIcon sx={{ fontSize: '24px' }} />
+            </IconButton>
+          </Box>
+        </Box>
       </Paper>
     </main>
   )

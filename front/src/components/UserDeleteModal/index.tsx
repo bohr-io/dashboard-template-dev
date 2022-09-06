@@ -15,8 +15,8 @@ const boxStyle = {
 
 const closeBtnStyle = {
   position: 'absolute',
-  top: 0,
-  right: 0,
+  top: '4px',
+  right: '4px',
 }
 
 type Props = {
@@ -62,7 +62,7 @@ const UserDeleteModal: FC<Props> = ({ user, onClose, onDelete, isDeleting, isOpe
           }}
         >
           <Button
-            variant="contained"
+            variant="outlined"
             onClick={onClose}
           >
             cancel
