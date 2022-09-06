@@ -90,9 +90,9 @@ const theme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: () => {
-          const color = theme.palette.primary.main
+          const color = theme.palette.primary.light
           return {
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: color,
             borderRadius: '2px',
             textTransform: 'uppercase',
             padding: '10px 20px 10px 10px',
@@ -100,7 +100,7 @@ const theme = createTheme({
           }
         },
         arrow: () => {
-          const color = theme.palette.primary.main
+          const color = theme.palette.primary.light
           return {
             '&::before': {
               backgroundColor: color,
