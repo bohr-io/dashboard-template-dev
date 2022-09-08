@@ -1,6 +1,6 @@
 import { default as BackArrow } from '@mui/icons-material/ArrowBackIos';
 import { Box, Button, Card, CardActions, CardContent, Typography } from '@mui/material';
-import { ChangeEventHandler, FormEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import DashInput from '../components/DashInput';
 import useUser from '../contexts/UserContext';
@@ -24,6 +24,11 @@ export default function UserDetail() {
     if (!user) return
     setFormData({ ...user })
   }, [user])
+
+  const handleBackLink: MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault()
+    navigate('/dash/users')
+  }  
 
   const handleSubmit: FormEventHandler<HTMLElement> = async (e) => {
     e.preventDefault()
@@ -63,10 +68,7 @@ export default function UserDetail() {
         LinkComponent="a"
         href="/dash/users"
         sx={{ '.MuiButton-startIcon': { mr: 0 } }}
-        onClick={(e) => {
-          e.preventDefault()
-          navigate('/dash/users')
-        }}
+        onClick={handleBackLink}
       >
         <BackArrow sx={{ fontSize: '16px' }} />
         Back
@@ -150,10 +152,7 @@ export default function UserDetail() {
               component="a"
               href="/dash/users"
               variant="outlined"
-              onClick={(e) => {
-                e.preventDefault()
-                navigate('/dash/users')
-              }}
+              onClick={handleBackLink}
             >
               Cancel
             </Button>
