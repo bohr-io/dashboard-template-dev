@@ -65,13 +65,33 @@ const theme = createTheme({
               borderWidth: 2,
               borderColor: theme.palette[color].main,
               padding: '4px 14px',
+              boxShadow: '0px 4px 12px hsla(22, 17%, 12%, 0.2), 0px 4px 12px inset hsla(22, 17%, 12%, 0.2)',
+              textShadow: '0 4px 6px hsla(22, 17%, 12%, 0.2)',
               '&:hover': {
                 borderWidth: 2,
-                borderColor: theme.palette[color].main,
-                backgroundColor: theme.palette[color].main,
+                borderColor: theme.palette[color].light,
+                backgroundColor: theme.palette[color].light,
                 color: theme.palette[color].contrastText,
+                boxShadow: '0px 4px 12px hsla(22, 17%, 12%, 0.2), 0px 4px 12px inset hsla(22, 17%, 12%, 0.2)',
               },
-            })
+            }),
+
+            ...(ownerState.variant === 'contained' && {
+              boxShadow: '0px 4px 12px hsla(22, 17%, 12%, 0.2)',
+              '&:hover': {
+                boxShadow: '0px 4px 12px hsla(22, 17%, 12%, 0.2), 0px 4px 12px inset hsla(22, 17%, 12%, 0.2)',
+                backgroundColor: theme.palette[color].light,
+                color: theme.palette[color].contrastText,
+              }
+            }),
+            
+            ...(ownerState.variant === 'text' && {
+              '&:hover': {
+                boxShadow: '0px 4px 12px hsla(22, 17%, 12%, 0.2)',
+                backgroundColor: theme.palette[color].light,
+                color: theme.palette[color].contrastText,
+              }
+            }),
           }
         }
       }
