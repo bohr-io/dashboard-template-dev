@@ -4,7 +4,10 @@ import prisma from '../prisma/prisma';
 module.exports = (api: API, opts: RegisterOptions) => {
     api.get("/", async (req, res) => {
         try {
-            const arrUser = await prisma.user.findMany();
+            console.log(req.query);
+            const arrUser = await prisma.user.findMany({
+                where: req.query
+            });
             res.status(200).json({ items: arrUser });
         } catch (e) {
             console.error(e);
