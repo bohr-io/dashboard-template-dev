@@ -4,10 +4,24 @@ import prisma from '../prisma/prisma';
 module.exports = (api: API, opts: RegisterOptions) => {
     api.get("/", async (req, res) => {
         try {
-            console.log(req.query);
-            const arrUser = await prisma.user.findMany({
-                where: req.query
-            });
+            const filter = {
+                username: req.query.username,
+                email: req.query.email
+            };
+            let arrUser:object = [];
+            if(req.query.order != undefined) {
+                arrUser = await prisma.user.findMany({
+                    where: filter,
+                    orderBy: [
+                        { [req.query.order]: req.query.orderType }
+                    ]
+                });
+            } else {
+                arrUser = await prisma.user.findMany({
+                    where: req.query
+                });
+            }
+            
             res.status(200).json({ items: arrUser });
         } catch (e) {
             console.error(e);
