@@ -8,17 +8,33 @@ module.exports = (api: API, opts: RegisterOptions) => {
                 username: req.query.username,
                 email: req.query.email
             };
+            
             let arrUser:object = [];
+            let take = 10;
+            let skip = 0;
+
+            if(req.query.take != undefined) {
+                take = Number(req.query.take);
+                if(take == -1) {
+                    take = await prisma.user.count();
+                }
+            }
+            if(req.query.skip != undefined) skip = Number(req.query.skip);
+            
             if(req.query.order != undefined) {
                 arrUser = await prisma.user.findMany({
                     where: filter,
+                    skip: skip,
+                    take: take,
                     orderBy: [
                         { [req.query.order]: req.query.orderType }
                     ]
                 });
             } else {
                 arrUser = await prisma.user.findMany({
-                    where: filter
+                    where: filter,
+                    skip: skip,
+                    take: take
                 });
             }
             
