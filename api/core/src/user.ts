@@ -18,7 +18,7 @@ module.exports = (api: API, opts: RegisterOptions) => {
                 });
             } else {
                 arrUser = await prisma.user.findMany({
-                    where: req.query
+                    where: filter
                 });
             }
             
