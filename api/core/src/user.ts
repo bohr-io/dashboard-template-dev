@@ -5,8 +5,12 @@ module.exports = (api: API, opts: RegisterOptions) => {
     api.get("/", async (req, res) => {
         try {
             const filter = {
-                username: req.query.username,
-                email: req.query.email
+                username: {
+                    contains: req.query.username
+                },
+                email: {
+                    contains: req.query.email
+                }
             };
             
             let arrUser:object = [];
