@@ -16,11 +16,12 @@ module.exports = (api: API, opts: RegisterOptions) => {
             let arrUser:object = [];
             let take = 10;
             let skip = 0;
+            let totalRows = await prisma.user.count();
 
             if(req.query.take != undefined) {
                 take = Number(req.query.take);
                 if(take == -1) {
-                    take = await prisma.user.count();
+                    take = totalRows;
                 }
             }
             if(req.query.skip != undefined) skip = Number(req.query.skip);
@@ -42,7 +43,7 @@ module.exports = (api: API, opts: RegisterOptions) => {
                 });
             }
             
-            res.status(200).json({ items: arrUser });
+            res.status(200).json({ items: arrUser, totalRows: totalRows });
         } catch (e) {
             console.error(e);
             res.error(e);
