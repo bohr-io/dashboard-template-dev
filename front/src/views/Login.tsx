@@ -13,8 +13,8 @@ const REACAPTCHA_SITE_KEY = "6Lc2OG4hAAAAAF_Wx9HXq3O-FKTmyG_eOamPyykl"
 const Login: FC = () => {
   const { Toast, showToast } = useToast()
   const navigate = useNavigate()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('admin')
+  const [password, setPassword] = useState('admin')
   const [recaptchaToken, setRecaptchaToken] = useState('')
   const isLoginDisabled = !username || !password || !recaptchaToken
 
