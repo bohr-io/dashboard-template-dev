@@ -66,6 +66,26 @@
           "User"
         ],
         "description": "List all users",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "description": "Dashboard registered username",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Dashboard registered email",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
