@@ -5,7 +5,9 @@
     "author": "",
     "private": true,
     "scripts": {
-        "build": "turbo run build --token=\"#TURBOREPO_TOKEN#\" --cache-dir=./turborepo-cache"
+        "build-api": "cd api/core && npx tsc",
+        "build-front": "cd front && next build && next export",
+        "build": "cd api/core && npx tsc && cd ../.. && cd front && next build && next export"
     },
     "workspaces": [
         "./front",
